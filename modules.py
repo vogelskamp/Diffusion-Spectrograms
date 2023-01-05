@@ -148,11 +148,11 @@ class UNet(nn.Module):
         self.bot2 = DoubleConv(256, 256)
         self.bot3 = DoubleConv(256, 128)
 
-        self.up1 = Up(128, 128)
+        self.up1 = Up(256, 128)
         self.sa4 = SelfAttention(128, int(img_width/4), int(img_height/4))
-        self.up2 = Up(128, 64)
+        self.up2 = Up(192, 64)
         self.sa5 = SelfAttention(64, int(img_width/2), int(img_height/2))
-        self.up3 = Up(64, 32)
+        self.up3 = Up(96, 32)
         self.sa6 = SelfAttention(32, img_width, img_height)
         self.outc = nn.Conv2d(32, c_out, kernel_size=1)
 

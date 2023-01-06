@@ -67,7 +67,7 @@ def train(args):
     setup_logging(args.run_name)
     device = args.device
     dataloader = get_data(args)
-    model = UNet().to(device)
+    model = UNet(device=device).to(device)
     optimizer = optim.AdamW(model.parameters(), lr=args.lr)
     mse = nn.MSELoss()
     diffusion = Diffusion(img_size=args.image_size, device=device)
@@ -105,9 +105,9 @@ def launch():
     args.run_name = "DDPM_Uncondtional"
     args.epochs = 500
     args.batch_size = 12
-    args.image_size = (128, 512)
+    args.image_size = (64, 64)
     args.dataset_path = r"/Users/samvogelskamp/Desktop/Uni/Audio Data Science/Diffusion-Spectrograms/data"
-    args.device = "cuda"
+    args.device = "cpu"
     args.lr = 3e-4
     train(args)
 

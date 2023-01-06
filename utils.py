@@ -22,18 +22,26 @@ def save_images(images, path, **kwargs):
 
 
 def get_data(args):
-    transforms = torchvision.transforms.Compose([
-        # args.image_size + 1/4 *args.image_size
-        torchvision.transforms.Resize(args.image_size * 1.25),
-        torchvision.transforms.RandomResizedCrop(
-            args.image_size, scale=(0.8, 1.0)),
-        torchvision.transforms.ToTensor(),
-        torchvision.transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-    ])
+    # transforms = torchvision.transforms.Compose([
+    #     # args.image_size + 1/4 *args.image_size
+    #     # torchvision.transforms.Resize(
+    #     #     args.image_size[0] + 1/4 * args.image_size[0]),
+    #     # torchvision.transforms.RandomResizedCrop(
+    #     #     args.image_size, scale=(0.8, 1.0)),
+    #     torchvision.transforms.ToTensor(),
+    #     torchvision.transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+    # ])
+
+    transforms = torchvision.transforms.Compose([torchvision.transforms.ToTensor(),
+                                                torchvision.transforms.Normalize(
+                                                    (0.5,), (0.5,))
+                                                 ])
 
     # TODO: Replace with loading in melspectrograms here
-    dataset = torchvision.datasets.ImageFolder(
-        args.dataset_path, transform=transforms)
+    # dataset = torchvision.datasets.ImageFolder(
+    #     args.dataset_path, transform=transforms)
+    dataset = torchvision.datasets.FakeData(
+        size=5, image_size=(1, 64, 64), transform=transforms)
     dataloader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
     return dataloader
 

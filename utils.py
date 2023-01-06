@@ -1,8 +1,9 @@
 import os
+
 import torch
 import torchvision
-from PIL import Image
 from matplotlib import pyplot as plt
+from PIL import Image
 from torch.utils.data import DataLoader
 
 
@@ -41,7 +42,7 @@ def get_data(args):
     # dataset = torchvision.datasets.ImageFolder(
     #     args.dataset_path, transform=transforms)
     dataset = torchvision.datasets.FakeData(
-        size=5, image_size=(1, 64, 64), transform=transforms)
+        size=5, image_size=(1, args.image_size[0], args.image_size[1]), transform=transforms)
     dataloader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
     return dataloader
 

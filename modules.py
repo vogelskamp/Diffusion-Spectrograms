@@ -53,7 +53,7 @@ class SelfAttention(nn.Module):
         attention_value, _ = self.mha(x_ln, x_ln, x_ln)
         attention_value = attention_value + x
         attention_value = self.ff_self(attention_value) + attention_value
-        return attention_value.swapaxes(2, 1).view(-1, self.channels, self.width, self.height)
+        return attention_value.swapaxes(2, 1).view(-1, self.channels, self.height, self.width)
 
 
 class DoubleConv(nn.Module):
@@ -171,42 +171,42 @@ class UNet(nn.Module):
         t = self.pos_encoding(t, self.time_dim)
 
         x1 = self.inc(x)
-        print("inc")
+        # print("inc")
         x2 = self.down1(x1, t)
-        print("down1")
+        # print("down1")
         x2 = self.sa1(x2)
-        print("sa1")
+        # print("sa1")
         x3 = self.down2(x2, t)
-        print("down2")
+        # print("down2")
         x3 = self.sa2(x3)
-        print("sa2")
+        # print("sa2")
         x4 = self.down3(x3, t)
-        print("down3")
+        # print("down3")
         x4 = self.sa3(x4)
-        print("sa3")
+        # print("sa3")
 
         x4 = self.bot1(x4)
-        print("bot1")
+        # print("bot1")
         x4 = self.bot2(x4)
-        print("bot2")
+        # print("bot2")
         x4 = self.bot3(x4)
-        print("bot3")
+        # print("bot3")
 
         x = self.up1(x4, x3, t)
-        print("up1")
+        # print("up1")
         x = self.sa4(x)
-        print("sa4")
+        # print("sa4")
         x = self.up2(x, x2, t)
-        print("up2")
+        # print("up2")
         x = self.sa5(x)
-        print("sa5")
+        # print("sa5")
         x = self.up3(x, x1, t)
-        print("up3")
+        # print("up3")
         x = self.sa6(x)
-        print("sa6")
+        # print("sa6")
         output = self.outc(x)
 
-        print("at least we ended up here")
+        # print("at least we ended up here")
         return output
 
 

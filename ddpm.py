@@ -107,7 +107,7 @@ def launch():
     args.run_name = "DDPM_Uncondtional"
     args.epochs = 500
     args.batch_size = 12
-    args.image_size = (64, 64)
+    args.image_size = (16, 64)
     args.dataset_path = r"/Users/samvogelskamp/Desktop/Uni/Audio Data Science/Diffusion-Spectrograms/data"
     args.device = "cpu"
     args.lr = 3e-4

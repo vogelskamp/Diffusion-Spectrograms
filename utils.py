@@ -6,6 +6,7 @@ from matplotlib import pyplot as plt
 from PIL import Image
 from torch.utils.data import DataLoader
 from data_set import SpectrogramSet
+import numpy as np
 
 
 def plot_images(images):
@@ -19,8 +20,12 @@ def plot_images(images):
 def save_images(images, path, **kwargs):
     grid = torchvision.utils.make_grid(images, **kwargs)
     ndarr = grid.permute(1, 2, 0).to('cpu').numpy()
-    im = Image.fromarray(ndarr)
-    im.save(path)
+
+    with open(path, 'wb') as f:
+        np.save(f, ndarr)
+    # ndarr = (ndarr * 255).astype(np.uint8)
+    # im = Image.fromarray(ndarr)
+    # im.save(path)
 
 
 def get_data(args):
@@ -38,10 +43,6 @@ def get_data(args):
                                                 torchvision.transforms.Normalize(
                                                     (0.5,), (0.5,))
                                                  ])
-
-    # TODO: Replace with loading in melspectrograms here
-    # dataset = torchvision.datasets.ImageFolder(
-    #     args.dataset_path, transform=transforms)
 
     dataset = SpectrogramSet(data_path=args.dataset_path)
     # dataset = torchvision.datasets.FakeData(

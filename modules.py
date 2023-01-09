@@ -212,7 +212,7 @@ class UNet(nn.Module):
 
 if __name__ == '__main__':
     # net = UNet(device="cpu")
-    net = UNet(device="cpu")
+    net = UNet(device="cuda", img_height=128, img_width=512)
     print(sum([p.numel() for p in net.parameters()]))
     x = torch.randn(3, 1, 128, 512)
     t = x.new_tensor([500] * x.shape[0]).long()

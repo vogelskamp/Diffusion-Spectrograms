@@ -3,7 +3,6 @@ import os
 
 import torch
 import torch.nn as nn
-from matplotlib import pyplot as plt
 from torch import optim
 from torch.utils.tensorboard import SummaryWriter
 from tqdm import tqdm
@@ -16,7 +15,7 @@ logging.basicConfig(format="%(asctime)s - %(levelname)s: %(message)s",
 
 
 class Diffusion:
-    def __init__(self, noise_steps=1000, beta_start=1e-4, beta_end=0.02, img_size=(128, 512), c_in=1, device="cuda"):
+    def __init__(self, noise_steps=100, beta_start=1e-4, beta_end=0.02, img_size=(128, 512), c_in=1, device="cuda"):
         self.noise_steps = noise_steps
         self.beta_start = beta_start
         self.beta_end = beta_end
@@ -75,12 +74,12 @@ def train(args):
     mse = nn.MSELoss()
     diffusion = Diffusion(img_size=args.image_size, device=device)
     logger = SummaryWriter(os.path.join("runs", args.run_name))
-    l = len(dataloader)
+    len_dataloader = len(dataloader)
 
     for epoch in range(args.epochs):
         logging.info(f"Starting epoch {epoch}:")
         pbar = tqdm(dataloader)
-        for i, (images, _) in enumerate(pbar):
+        for i, images in enumerate(pbar):
             images = images.to(device)
             t = diffusion.sample_timesteps(images.shape[0]).to(device)
             x_t, noise = diffusion.noise_images(images, t)
@@ -92,11 +91,11 @@ def train(args):
             optimizer.step()
 
             pbar.set_postfix(MSE=loss.item())
-            logger.add_scalar("MSE", loss.item(), global_step=epoch * l + i)
+            logger.add_scalar("MSE", loss.item(), global_step=epoch * len_dataloader + i)
 
         sampled_images = diffusion.sample(model, n=images.shape[0])
         save_images(sampled_images, os.path.join(
-            "results", args.run_name, f"{epoch}.jpg"))
+            "results", args.run_name, f"{epoch}.npy"))
         torch.save(model.state_dict(), os.path.join(
             "models", args.run_name, f"ckpt.pt"))
 
@@ -107,10 +106,10 @@ def launch():
     args = parser.parse_args()
     args.run_name = "DDPM_Uncondtional"
     args.epochs = 500
-    args.batch_size = 12
-    args.image_size = (128, 512)
-    args.dataset_path = "/Users/samvogelskamp/Desktop/Uni/Audio Data Science/data/"
-    args.device = "cpu"
+    args.batch_size = 1
+    args.image_size = (128, 128)
+    args.dataset_path = "C:/Users/student-isave/Documents/Diffusion-Spectrograms/audio_data"
+    args.device = "cuda"
     args.lr = 3e-4
     train(args)
 

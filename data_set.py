@@ -16,10 +16,17 @@ class SpectrogramSet(Dataset):
         return len(self.data)
 
     def __getitem__(self, idx):
-        pass
+        
+        target = self.data[idx]
+
+        if self.transform:
+            target = self.transform(target)
+
+        return target
 
     def load_data(self, path):
 
+        if path[-1] != "/": path = path + "/"
         result = []
         for file in tqdm(os.listdir(path)):
 
@@ -28,11 +35,12 @@ class SpectrogramSet(Dataset):
                 continue
 
             with open(path + file, 'rb') as f:
-                result.append(np.load(f))
+                result.append(np.load(f)[0:128, 0:128])
+                # result.append(np.load(f))
 
-        return result
+        return np.array(result)[:, np.newaxis, :, :]
 
 
 if __name__ == '__main__':
     test = SpectrogramSet(
-        data_path="/Users/samvogelskamp/Desktop/Uni/Audio Data Science/data/")
+        data_path="C:/Users/student-isave/Documents/Diffusion-Spectrograms/audio_data")

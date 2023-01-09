@@ -1,3 +1,5 @@
 runs/
-results/
 __pycache__/
+audio/
+padded_audio/
+audio_data/

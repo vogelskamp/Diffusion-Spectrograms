@@ -53,3 +53,5 @@ This model was trained on [CIFAR-10 64x64](https://www.kaggle.com/datasets/joaop
 <hr>
 
 A more advanced version of this code can be found [here](https://github.com/tcapelle/Diffusion-Models-pytorch) by [@tcapelle](https://github.com/tcapelle). It introduces better logging, faster & more efficient training and other nice features and is also being followed by a nice [write-up](https://wandb.ai/capecape/train_sd/reports/Training-a-Conditional-Diffusion-model-from-scratch--VmlldzoyODMxNjE3).
+
+[Spectrogram data](https://fhd-my.sharepoint.com/:f:/g/personal/sander_tebeck_study_hs-duesseldorf_de/EqVKW_7t50dJr5dvU9QDeEEBOJl6PJS9Ye1eISSsH9Y-Lg?email=sam.vogelskamp%40study.hs-duesseldorf.de&e=EM5IPu)

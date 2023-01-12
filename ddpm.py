@@ -91,7 +91,8 @@ def train(args):
             optimizer.step()
 
             pbar.set_postfix(MSE=loss.item())
-            logger.add_scalar("MSE", loss.item(), global_step=epoch * len_dataloader + i)
+            logger.add_scalar("MSE", loss.item(),
+                              global_step=epoch * len_dataloader + i)
 
         sampled_images = diffusion.sample(model, n=images.shape[0])
         save_images(sampled_images, os.path.join(
@@ -106,8 +107,8 @@ def launch():
     args = parser.parse_args()
     args.run_name = "DDPM_Uncondtional"
     args.epochs = 500
-    args.batch_size = 1
-    args.image_size = (128, 128)
+    args.batch_size = 5
+    args.image_size = (32, 32)
     args.dataset_path = "C:/Users/student-isave/Documents/Diffusion-Spectrograms/audio_data"
     args.device = "cuda"
     args.lr = 3e-4

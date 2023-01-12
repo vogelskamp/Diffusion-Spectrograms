@@ -10,8 +10,8 @@ from augment import augment
 from tqdm import tqdm
 
 MAX_LENGTH = 10
-TIME_STEPS = 512
-N_MELS = 128
+TIME_STEPS = 128
+N_MELS = 32
 
 ORIGIN_FOLDER_PATH = tkinter.filedialog.askdirectory(
     title='Select Origin Folder')

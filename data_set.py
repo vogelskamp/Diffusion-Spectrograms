@@ -36,7 +36,7 @@ class SpectrogramSet(Dataset):
                 continue
 
             with open(path + file, 'rb') as f:
-                result.append(np.load(f)[:, 0:128, 0:128])
+                result.append(np.load(f)[:, 0:32, 0:32])
                 # result.append(np.load(f))
 
         return np.array(result)

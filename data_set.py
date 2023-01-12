@@ -16,7 +16,7 @@ class SpectrogramSet(Dataset):
         return len(self.data)
 
     def __getitem__(self, idx):
-        
+
         target = self.data[idx]
 
         if self.transform:
@@ -26,19 +26,20 @@ class SpectrogramSet(Dataset):
 
     def load_data(self, path):
 
-        if path[-1] != "/": path = path + "/"
+        if path[-1] != "/":
+            path = path + "/"
         result = []
         for file in tqdm(os.listdir(path)):
 
-            if not file.endswith("-padded.npy"):
-                print(file, "does not end in -padded.npy, ignoring..")
+            if not file.endswith(".npy"):
+                print(file, "does not end in .npy, ignoring..")
                 continue
 
             with open(path + file, 'rb') as f:
-                result.append(np.load(f)[0:128, 0:128])
+                result.append(np.load(f)[:, 0:128, 0:128])
                 # result.append(np.load(f))
 
-        return np.array(result)[:, np.newaxis, :, :]
+        return np.array(result)
 
 
 if __name__ == '__main__':

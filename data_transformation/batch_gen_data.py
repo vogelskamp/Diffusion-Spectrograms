@@ -9,19 +9,29 @@ import soundfile as sf
 from augment import augment
 from tqdm import tqdm
 
-MAX_LENGTH = 10
-TIME_STEPS = 128
-N_MELS = 32
+MAX_LENGTH = 12
+TIME_STEPS = 1024
+N_MELS = 128
 
-ORIGIN_FOLDER_PATH = tkinter.filedialog.askdirectory(
-    title='Select Origin Folder')
 
-DESTINATION_FOLDER_PATH = tkinter.filedialog.askdirectory(
-    title='Select Destination Folder') + "/"
+# ORIGIN_FOLDER_PATH = tkinter.filedialog.askdirectory(
+#     title='Select Origin Folder')
+
+ORIGIN_FOLDER_PATH = r"S:\Code\_Uni\Diffusion-Spectrograms\audio"
+
+# DESTINATION_FOLDER_PATH = tkinter.filedialog.askdirectory(
+#     title='Select Destination Folder') + "/"
+
+DESTINATION_FOLDER_PATH = r"S:\Code\_Uni\Diffusion-Spectrograms\data"
+
+last_idx = int(len(os.listdir(DESTINATION_FOLDER_PATH)) / 21)
 
 for base, dirs, files in os.walk(ORIGIN_FOLDER_PATH):
 
-    print('Augmenting: ', base)
+    files = files[last_idx:]
+
+    print(f'Augmenting {base} starting at index {last_idx}')
+
     for file in tqdm(files):
         # Append Filepath to current Filepath
         currentFilepath = ORIGIN_FOLDER_PATH + "/" + file
@@ -33,18 +43,20 @@ for base, dirs, files in os.walk(ORIGIN_FOLDER_PATH):
             print(file, " is too long, skipping...")
             continue
 
-        # add padding and fadeout
-        utils.apply_fadeout(data, sr)
-
         TARGET_SAMPLES = sr * MAX_LENGTH
-        data = np.append(data, np.zeros(TARGET_SAMPLES - len(data)))
 
         # expand data through augmentation
         expanded_data = augment(data, sr, file.split('.')[-2])
 
         # generate mel spectrograms
         for audio, name in expanded_data:
-            hop_length = math.floor(len(data)/TIME_STEPS)
+
+            # add padding and fadeout
+            utils.apply_fadeout(audio, sr)
+
+            data = np.append(audio, np.zeros(TARGET_SAMPLES - len(audio)))
+
+            hop_length = math.floor(len(audio)/TIME_STEPS)
             start_sample = 0
             length_samples = TIME_STEPS * hop_length
             window = audio[start_sample:start_sample+length_samples - 1]
@@ -63,7 +75,6 @@ for base, dirs, files in os.walk(ORIGIN_FOLDER_PATH):
             M_db = M_db[np.newaxis, :, :]
 
             # save
-            NEW_NAME = DESTINATION_FOLDER_PATH + name + ".npy"
-            with open(NEW_NAME, 'wb') as f:
+            with open(f"{DESTINATION_FOLDER_PATH}/{name}.npy", 'wb') as f:
                 # save to file
                 np.save(f, M_db)
